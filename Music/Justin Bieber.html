@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Justin Bieber</title>
@@ -18,10 +18,10 @@
 
     <main id="conteudo">
       <div id="album-header">
-        <img src="Images/justin bieber.jpg" alt="Justin Bieber">
+        <img src="Images/Justin%20Bieber.jpg" alt="Justin Bieber">
         <div>
           <h1>Justin Bieber</h1>
-          <p>Artist • Playlist</p>
+          <p>Artist â€¢ Playlist</p>
         </div>
       </div>
 
@@ -59,7 +59,7 @@
         </button>
       </div>
       <div class="controls">
-        <button id="muteBtn" onclick="toggleMute()" aria-label="Mute or unmute">🔊</button>
+        <button id="muteBtn" onclick="toggleMute()" aria-label="Mute or unmute">ðŸ”Š</button>
         <input type="range" id="volume" min="0" max="1" step="0.01" value="1" aria-label="Volume">
       </div>
     </div>
@@ -158,7 +158,7 @@
 
     function toggleMute() {
       audio.muted = !audio.muted;
-      muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+      muteBtn.textContent = audio.muted ? 'ðŸ”‡' : 'ðŸ”Š';
     }
 
     audio.addEventListener('timeupdate', () => {
