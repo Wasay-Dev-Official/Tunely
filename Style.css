@@ -1697,6 +1697,11 @@ a {
   box-shadow: var(--shadow);
 }
 
+.playlist-library-section.is-drop-target {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .playlist-library-heading {
   display: flex;
   align-items: baseline;
@@ -1726,6 +1731,20 @@ a {
 
 .playlist-song-grid > .song-entry {
   width: 100%;
+}
+
+.playlist-song-grid > .song-entry[draggable='true'] {
+  cursor: grab;
+}
+
+.playlist-song-grid > .song-entry.is-dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+}
+
+.playlist-song-grid > .song-entry.is-drop-target > .song-card {
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .playlist-empty {
