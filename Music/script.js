@@ -1359,12 +1359,13 @@ function renderPlaylistLibrary() {
 
   if (emptyState) emptyState.hidden = true;
 
-  playlists.forEach((playlist) => {
+  playlists.forEach((playlist, playlistIndex) => {
     const songs = Array.isArray(playlist.songs)
       ? playlist.songs.filter((song) => song && typeof song.title === 'string')
       : [];
     const section = document.createElement('section');
     section.className = 'playlist-library-section';
+    section.dataset.playlistIndex = String(playlistIndex);
 
     const heading = document.createElement('div');
     heading.className = 'playlist-library-heading';
@@ -1383,12 +1384,16 @@ function renderPlaylistLibrary() {
       emptyPlaylist.textContent = getCurrentTranslations().playlistEmpty;
       grid.appendChild(emptyPlaylist);
     } else {
-      songs.forEach((song) => {
+      playlist.songs.forEach((song, songIndex) => {
+        if (!song || typeof song.title !== 'string') return;
         const playlistSong = getCatalogSongDetails(song);
-        const playlistIndex = playlistLibrarySongs.length;
+        const playbackIndex = playlistLibrarySongs.length;
         playlistLibrarySongs.push(playlistSong);
         const entry = createPlaylistLibrarySongCard(playlistSong);
-        entry.querySelector('.song-card').dataset.playlistIndex = String(playlistIndex);
+        entry.draggable = true;
+        entry.dataset.playlistIndex = String(playlistIndex);
+        entry.dataset.songIndex = String(songIndex);
+        entry.querySelector('.song-card').dataset.playlistIndex = String(playbackIndex);
         grid.appendChild(entry);
       });
     }
@@ -1405,6 +1410,14 @@ function initPlaylistLibraryPlayback() {
   if (!container) return;
 
   let currentIndex = -1;
+  let draggedEntry = null;
+  let dropTarget = null;
+  const clearDragState = () => {
+    draggedEntry?.classList.remove('is-dragging');
+    dropTarget?.classList.remove('is-drop-target');
+    draggedEntry = null;
+    dropTarget = null;
+  };
   const playAt = (index) => {
     if (!playlistLibrarySongs.length) return;
     currentIndex = (index + playlistLibrarySongs.length) % playlistLibrarySongs.length;
@@ -1424,6 +1437,100 @@ function initPlaylistLibraryPlayback() {
     if (previousButton) previousButton.disabled = false;
     if (nextButton) nextButton.disabled = false;
   });
+
+  container.addEventListener('dragstart', (event) => {
+    const entry = event.target.closest('.playlist-song-grid > .song-entry');
+    if (!entry || event.target.closest('.song-actions')) {
+      event.preventDefault();
+      return;
+    }
+    draggedEntry = entry;
+    entry.classList.add('is-dragging');
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  });
+
+  container.addEventListener('dragover', (event) => {
+    const entry = event.target.closest('.playlist-song-grid > .song-entry');
+    const section = event.target.closest('.playlist-library-section');
+    if (!draggedEntry || !section) return;
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    dropTarget?.classList.remove('is-drop-target');
+    dropTarget = entry || section;
+    dropTarget.classList.add('is-drop-target');
+  });
+
+  container.addEventListener('dragleave', (event) => {
+    const target = event.target.closest('.playlist-song-grid > .song-entry, .playlist-library-section');
+    if (target === dropTarget && !target.contains(event.relatedTarget)) {
+      target.classList.remove('is-drop-target');
+      dropTarget = null;
+    }
+  });
+
+  container.addEventListener('drop', (event) => {
+    const targetEntry = event.target.closest('.playlist-song-grid > .song-entry');
+    const targetSection = event.target.closest('.playlist-library-section');
+    if (!draggedEntry || !targetSection) return;
+    event.preventDefault();
+
+    const sourcePlaylistIndex = Number(draggedEntry.dataset.playlistIndex);
+    const targetPlaylistIndex = Number(targetSection.dataset.playlistIndex);
+    const sourceIndex = Number(draggedEntry.dataset.songIndex);
+    const targetIndex = targetEntry
+      ? Number(targetEntry.dataset.songIndex)
+      : undefined;
+    const playlists = getStoredPlaylists();
+    const sourcePlaylist = playlists[sourcePlaylistIndex];
+    const targetPlaylist = playlists[targetPlaylistIndex];
+    const sourceSongs = sourcePlaylist?.songs;
+    const targetSongs = Array.isArray(targetPlaylist?.songs) ? targetPlaylist.songs : [];
+    if (!sourcePlaylist || !targetPlaylist || !Array.isArray(sourceSongs)
+      || !Number.isInteger(sourceIndex) || sourceIndex < 0 || sourceIndex >= sourceSongs.length
+      || !Number.isInteger(targetPlaylistIndex)
+      || (targetIndex !== undefined
+        && (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= targetSongs.length))) {
+      clearDragState();
+      return;
+    }
+
+    const movedSong = sourceSongs[sourceIndex];
+    if (sourcePlaylistIndex !== targetPlaylistIndex && targetSongs.some((song) =>
+      String(song?.title || '').toLowerCase() === String(movedSong?.title || '').toLowerCase()
+      && String(song?.artist || '').toLowerCase() === String(movedSong?.artist || '').toLowerCase()
+    )) {
+      clearDragState();
+      showSongActionFeedback(getCurrentTranslations().playlistAlreadyContainsSong);
+      return;
+    }
+    if (sourcePlaylistIndex === targetPlaylistIndex && targetIndex === sourceIndex) {
+      clearDragState();
+      return;
+    }
+
+    const activeSong = playlistLibrarySongs[currentIndex];
+    sourceSongs.splice(sourceIndex, 1);
+    targetPlaylist.songs = targetSongs;
+    let insertionIndex = targetIndex ?? targetSongs.length;
+    if (sourcePlaylistIndex === targetPlaylistIndex && insertionIndex > sourceIndex) {
+      insertionIndex -= 1;
+    }
+    targetSongs.splice(insertionIndex, 0, movedSong);
+    clearDragState();
+    if (!saveStoredPlaylists(playlists)) {
+      renderPlaylistLibrary();
+      return;
+    }
+    renderPlaylistLibrary();
+    if (activeSong) {
+      currentIndex = playlistLibrarySongs.findIndex((song) =>
+        song.title.toLowerCase() === activeSong.title.toLowerCase()
+        && song.artist.toLowerCase() === activeSong.artist.toLowerCase()
+      );
+    }
+  });
+
+  container.addEventListener('dragend', clearDragState);
 
   previousButton?.addEventListener('click', () => playAt(currentIndex - 1));
   nextButton?.addEventListener('click', () => playAt(currentIndex + 1));
