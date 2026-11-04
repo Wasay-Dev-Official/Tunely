@@ -1328,13 +1328,13 @@ function getCatalogSongDetails(song) {
   return {
     title: song.title,
     artist: song.artist || matchedAlbum?.artist || 'Unknown Artist',
-    preview: song.preview || (matchedAlbum && matchedTrack?.[1]
+    preview: matchedAlbum && matchedTrack?.[1]
       ? getCatalogAssetPath(matchedAlbum, matchedTrack[1])
-      : ''),
-    image: song.image || (matchedAlbum && matchedTrack?.[2]
+      : song.preview || '',
+    image: matchedAlbum && matchedTrack?.[2]
       ? getCatalogAssetPath(matchedAlbum, matchedTrack[2])
-      : ''),
-    page: song.page || matchedAlbum?.page || ''
+      : song.image || '',
+    page: matchedAlbum?.page || song.page || ''
   };
 }
 
@@ -1581,6 +1581,7 @@ function renderFavoriteSongs() {
   if (emptyState) emptyState.hidden = true;
 
   favorites.forEach((song, index) => {
+    const track = getCatalogSongDetails(song);
     const entry = document.createElement('div');
     entry.className = 'song-entry';
     entry.dataset.recentIndex = String(index);
@@ -1588,21 +1589,14 @@ function renderFavoriteSongs() {
     const card = document.createElement('button');
     card.className = 'song-card';
     card.type = 'button';
-    card.dataset.search = song.title;
-    card.dataset.artist = song.artist || 'Unknown Artist';
-    card.dataset.preview = song.preview || '';
-    card.dataset.albumPage = song.page || '';
-    card.setAttribute('aria-label', `${song.title} by ${song.artist || 'Unknown Artist'}`);
+    card.dataset.search = track.title;
+    card.dataset.artist = track.artist;
+    card.dataset.preview = track.preview;
+    card.dataset.albumPage = track.page;
+    card.setAttribute('aria-label', `${track.title} by ${track.artist}`);
 
     const image = document.createElement('img');
-    const album = (window.tunelySongCatalog || []).find(
-      (entry) => entry.artist.toLowerCase() === String(song.artist || '').toLowerCase()
-    );
-    const track = album?.tracks.find(([title]) => title.toLowerCase() === String(song.title || '').toLowerCase());
-    const audioMatch = findCatalogTrackByAudio(song.preview);
-    const artwork = song.image || (track ? getCatalogAssetPath(album, track[2]) : '')
-      || (audioMatch ? getCatalogAssetPath(audioMatch.album, audioMatch.imageFile) : '');
-    if (artwork) image.src = artwork;
+    if (track.image) image.src = track.image;
     image.alt = '';
     image.loading = 'lazy';
 
@@ -1611,15 +1605,15 @@ function renderFavoriteSongs() {
 
     const title = document.createElement('span');
     title.className = 'song-card-title';
-    title.textContent = song.title;
+    title.textContent = track.title;
 
     const artist = document.createElement('span');
     artist.className = 'song-card-artist';
-    artist.textContent = song.artist || 'Unknown Artist';
+    artist.textContent = track.artist;
 
     copy.append(title, artist);
     card.append(image, copy);
-    entry.append(card, createSongActions(song));
+    entry.append(card, createSongActions(track));
     grid.appendChild(entry);
   });
 
@@ -2035,13 +2029,17 @@ function renderRecentlyPlayedSongs() {
   const songs = getRecentlyPlayedSongs();
   if (recentSongsGrid && recentSongsSection) {
     const homeSongs = songs.slice(0, HOME_RECENTLY_PLAYED_LIMIT);
-    recentSongsGrid.replaceChildren(...homeSongs.map(createSongEntry));
+    recentSongsGrid.replaceChildren(...homeSongs.map((song) =>
+      createSongEntry(getCatalogSongDetails(song))
+    ));
     recentSongCards = Array.from(recentSongsGrid.querySelectorAll('.song-card'));
     const emptyMessage = document.getElementById('recentSongsEmpty');
     if (emptyMessage) emptyMessage.hidden = homeSongs.length > 0;
   }
   if (libraryRecentSongsGrid) {
-    libraryRecentSongsGrid.replaceChildren(...songs.map(createSongEntry));
+    libraryRecentSongsGrid.replaceChildren(...songs.map((song) =>
+      createSongEntry(getCatalogSongDetails(song))
+    ));
     const emptyMessage = document.getElementById('libraryRecentSongsEmpty');
     if (emptyMessage) emptyMessage.hidden = songs.length > 0;
   }
