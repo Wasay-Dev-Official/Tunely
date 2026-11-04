@@ -8,6 +8,7 @@ const catalogGrid = document.getElementById('homeSongsGrid');
 const homeSongsSection = document.getElementById('homeSongsSection');
 const recentSongsSection = document.getElementById('recentSongsSection');
 const recentSongsGrid = document.getElementById('recentSongsGrid');
+const libraryRecentSongsGrid = document.getElementById('libraryRecentSongsGrid');
 const albumsSection = document.querySelector('.home-albums-section');
 const cards = Array.from(document.querySelectorAll('.album-card'));
 const songItems = Array.from(document.querySelectorAll('.song'));
@@ -94,13 +95,14 @@ const translations = {
     searchPlaceholder: 'What do you want to play?',
     listenHeading: 'What do you want to listen to?',
     artist: 'Artist',
-    emptyState: 'No matches found. Try another artist or song.',
+    emptyState: 'No artist or song found with this name.',
     nowPlaying: 'Now Playing:',
     quickPlay: 'Quick Play',
     songsHeading: 'Songs',
     albumsHeading: 'Albums',
     recentlyPlayedHeading: 'Recently played',
     recentSongsEmpty: 'Play a song to start your recent list.',
+    seeMore: 'See more',
     none: 'None',
     trackProgress: 'Track progress',
     previousSong: 'Previous song',
@@ -167,8 +169,9 @@ const translations = {
     albumsHeading: 'الألبومات',
     recentlyPlayedHeading: 'تم تشغيلها مؤخرًا',
     recentSongsEmpty: 'شغّل أغنية لبدء قائمة التشغيل الأخيرة.',
+    seeMore: 'عرض المزيد',
     artist: 'فنان',
-    emptyState: 'لم يتم العثور على نتائج. جرّب فنانًا أو أغنية أخرى.',
+    emptyState: 'لم يتم العثور على فنان أو أغنية بهذا الاسم.',
     nowPlaying: 'يُشغّل الآن:',
     none: 'لا شيء',
     trackProgress: 'تقدم المقطع',
@@ -236,8 +239,9 @@ const translations = {
     albumsHeading: 'অ্যালবাম',
     recentlyPlayedHeading: 'সম্প্রতি চালানো',
     recentSongsEmpty: 'সাম্প্রতিক তালিকা শুরু করতে একটি গান চালান।',
+    seeMore: 'আরও দেখুন',
     artist: 'শিল্পী',
-    emptyState: 'কোনো ফলাফল পাওয়া যায়নি। অন্য শিল্পী বা গান খুঁজুন।',
+    emptyState: 'এই নামে কোনো শিল্পী বা গান পাওয়া যায়নি।',
     nowPlaying: 'এখন চলছে:',
     none: 'কিছুই নয়',
     trackProgress: 'গানের অগ্রগতি',
@@ -305,8 +309,9 @@ const translations = {
     albumsHeading: 'Άλμπουμ',
     recentlyPlayedHeading: 'Πρόσφατα ακούστηκαν',
     recentSongsEmpty: 'Αναπαραγάγετε ένα τραγούδι για να ξεκινήσει η λίστα πρόσφατων.',
+    seeMore: 'Δείτε περισσότερα',
     artist: 'Καλλιτέχνης',
-    emptyState: 'Δεν βρέθηκαν αποτελέσματα. Δοκιμάστε άλλον καλλιτέχνη ή τραγούδι.',
+    emptyState: 'Δεν βρέθηκε καλλιτέχνης ή τραγούδι με αυτό το όνομα.',
     nowPlaying: 'Αναπαραγωγή τώρα:',
     none: 'Κανένα',
     trackProgress: 'Πρόοδος κομματιού',
@@ -374,8 +379,9 @@ const translations = {
     albumsHeading: 'एल्बम',
     recentlyPlayedHeading: 'हाल ही में सुने गए',
     recentSongsEmpty: 'हाल की सूची शुरू करने के लिए कोई गाना चलाएँ।',
+    seeMore: 'और देखें',
     artist: 'कलाकार',
-    emptyState: 'कोई परिणाम नहीं मिला। कोई दूसरा कलाकार या गाना आज़माएँ।',
+    emptyState: 'इस नाम का कोई कलाकार या गाना नहीं मिला।',
     nowPlaying: 'अभी चल रहा है:',
     none: 'कुछ नहीं',
     trackProgress: 'गाने की प्रगति',
@@ -443,8 +449,9 @@ const translations = {
     albumsHeading: 'Álbuns',
     recentlyPlayedHeading: 'Reproduzidas recentemente',
     recentSongsEmpty: 'Reproduz uma música para iniciar a lista recente.',
+    seeMore: 'Ver mais',
     artist: 'Artista',
-    emptyState: 'Não foram encontrados resultados. Tente outro artista ou música.',
+    emptyState: 'Não foi encontrado nenhum artista ou música com este nome.',
     nowPlaying: 'A tocar:',
     none: 'Nenhuma',
     trackProgress: 'Progresso da faixa',
@@ -512,8 +519,9 @@ const translations = {
     albumsHeading: 'Альбомы',
     recentlyPlayedHeading: 'Недавно прослушанные',
     recentSongsEmpty: 'Включите песню, чтобы начать список недавно прослушанных.',
+    seeMore: 'Показать ещё',
     artist: 'Исполнитель',
-    emptyState: 'Ничего не найдено. Попробуйте другого исполнителя или песню.',
+    emptyState: 'Исполнитель или песня с таким названием не найдены.',
     nowPlaying: 'Сейчас играет:',
     none: 'Нет',
     trackProgress: 'Прогресс трека',
@@ -581,8 +589,9 @@ const translations = {
     albumsHeading: 'Albums',
     recentlyPlayedHeading: 'Écoutés récemment',
     recentSongsEmpty: 'Lancez un morceau pour commencer votre liste récente.',
+    seeMore: 'Voir plus',
     artist: 'Artiste',
-    emptyState: 'Aucun résultat. Essayez un autre artiste ou morceau.',
+    emptyState: 'Aucun artiste ou morceau trouvé sous ce nom.',
     nowPlaying: 'En cours de lecture :',
     none: 'Aucun',
     trackProgress: 'Progression du morceau',
@@ -650,8 +659,9 @@ const translations = {
     albumsHeading: 'Álbumes',
     recentlyPlayedHeading: 'Escuchadas recientemente',
     recentSongsEmpty: 'Reproduce una canción para iniciar tu lista reciente.',
+    seeMore: 'Ver más',
     artist: 'Artista',
-    emptyState: 'No se encontraron resultados. Prueba con otro artista o canción.',
+    emptyState: 'No se encontró ningún artista o canción con este nombre.',
     nowPlaying: 'Reproduciendo:',
     none: 'Nada',
     trackProgress: 'Progreso de la canción',
@@ -719,8 +729,9 @@ const translations = {
     albumsHeading: '专辑',
     recentlyPlayedHeading: '最近播放',
     recentSongsEmpty: '播放一首歌曲以开始最近播放列表。',
+    seeMore: '查看更多',
     artist: '艺人',
-    emptyState: '没有找到结果。请尝试其他艺人或歌曲。',
+    emptyState: '未找到此名称对应的艺人或歌曲。',
     nowPlaying: '正在播放：',
     none: '无',
     trackProgress: '播放进度',
@@ -788,8 +799,9 @@ const translations = {
     albumsHeading: 'Albümler',
     recentlyPlayedHeading: 'Son çalınanlar',
     recentSongsEmpty: 'Son çalınanlar listenizi başlatmak için bir şarkı çalın.',
+    seeMore: 'Daha fazla gör',
     artist: 'Sanatçı',
-    emptyState: 'Sonuç bulunamadı. Başka bir sanatçı veya şarkı deneyin.',
+    emptyState: 'Bu isimde bir sanatçı veya şarkı bulunamadı.',
     nowPlaying: 'Şimdi çalıyor:',
     none: 'Yok',
     trackProgress: 'Parça ilerlemesi',
@@ -858,7 +870,7 @@ const translations = {
     recentlyPlayedHeading: 'حال ہی میں چلائے گئے',
     recentSongsEmpty: 'اپنی حالیہ فہرست شروع کرنے کے لیے کوئی گانا چلائیں۔',
     artist: 'فنکار',
-    emptyState: 'کوئی نتیجہ نہیں ملا۔ کوئی اور فنکار یا گانا آزمائیں۔',
+    emptyState: 'اس نام کا کوئی فنکار یا گانا نہیں ملا۔',
     nowPlaying: 'اب چل رہا ہے:',
     none: 'کچھ نہیں',
     trackProgress: 'گانے کی پیش رفت',
@@ -908,21 +920,38 @@ function getCurrentSongFromPlayer() {
   };
 }
 
+function getCatalogAssetPath(album, fileName) {
+  return /^https?:\/\//i.test(fileName)
+    ? fileName
+    : `Audios/${album.artist}/${fileName}`;
+}
+
 function findCatalogTrackByAudio(source) {
   if (!source || !Array.isArray(window.tunelySongCatalog)) return null;
 
-  let normalizedSource = source;
+  let normalizedSource;
   try {
-    normalizedSource = decodeURIComponent(source);
+    normalizedSource = decodeURIComponent(new URL(source, window.location.href).pathname)
+      .replace(/\\/g, '/')
+      .toLowerCase();
   } catch (error) {
     console.warn('Could not decode the current audio URL while matching its catalog entry.', error);
+    return null;
   }
-  normalizedSource = normalizedSource.replace(/\\/g, '/').toLowerCase();
 
   for (const album of window.tunelySongCatalog) {
     for (const [title, audioFile, imageFile] of album.tracks) {
-      const relativeAudioPath = `Audios/${album.artist}/${audioFile}`.toLowerCase();
-      if (normalizedSource.endsWith(relativeAudioPath)) {
+      let expectedAudioPath;
+      try {
+        expectedAudioPath = decodeURIComponent(new URL(
+          getCatalogAssetPath(album, audioFile),
+          window.location.href
+        ).pathname).toLowerCase();
+      } catch (error) {
+        console.warn('Could not resolve a catalog audio URL.', error);
+        continue;
+      }
+      if (normalizedSource.endsWith(expectedAudioPath)) {
         return { album, title, imageFile };
       }
     }
@@ -945,7 +974,7 @@ function updatePlayerArtwork(source) {
     return;
   }
 
-  artwork.src = `Audios/${track.album.artist}/${track.imageFile}`;
+  artwork.src = getCatalogAssetPath(track.album, track.imageFile);
   artworkLink.href = track.album.page;
   artworkLink.setAttribute('aria-label', `Open ${track.album.artist} album`);
   artworkLink.hidden = false;
@@ -962,7 +991,7 @@ function buildFavoriteSongFromCurrentPlayer() {
       title,
       artist: album.artist,
       preview: audioSource,
-      image: `Audios/${album.artist}/${imageFile}`,
+      image: getCatalogAssetPath(album, imageFile),
       page: album.page
     };
   }
@@ -977,7 +1006,7 @@ function buildFavoriteSongFromCurrentPlayer() {
     title: song.title,
     artist: artistName,
     preview: audioSource,
-    image: track ? `Audios/${artistName}/${track[2]}` : '',
+    image: track ? getCatalogAssetPath(album, track[2]) : '',
     page: window.location.pathname.split('/').pop() || 'index.html'
   };
 }
@@ -1269,8 +1298,8 @@ function enhanceArtistSongRows() {
 
     row.dataset.search = track[0];
     row.dataset.artist = album.artist;
-    row.dataset.preview = `Audios/${album.artist}/${track[1]}`;
-    row.dataset.image = `Audios/${album.artist}/${track[2]}`;
+    row.dataset.preview = getCatalogAssetPath(album, track[1]);
+    row.dataset.image = getCatalogAssetPath(album, track[2]);
     row.dataset.albumPage = album.page;
     row.appendChild(createSongActions({
       title: track[0],
@@ -1300,10 +1329,10 @@ function getCatalogSongDetails(song) {
     title: song.title,
     artist: song.artist || matchedAlbum?.artist || 'Unknown Artist',
     preview: song.preview || (matchedAlbum && matchedTrack?.[1]
-      ? `Audios/${matchedAlbum.artist}/${matchedTrack[1]}`
+      ? getCatalogAssetPath(matchedAlbum, matchedTrack[1])
       : ''),
     image: song.image || (matchedAlbum && matchedTrack?.[2]
-      ? `Audios/${matchedAlbum.artist}/${matchedTrack[2]}`
+      ? getCatalogAssetPath(matchedAlbum, matchedTrack[2])
       : ''),
     page: song.page || matchedAlbum?.page || ''
   };
@@ -1571,8 +1600,8 @@ function renderFavoriteSongs() {
     );
     const track = album?.tracks.find(([title]) => title.toLowerCase() === String(song.title || '').toLowerCase());
     const audioMatch = findCatalogTrackByAudio(song.preview);
-    const artwork = song.image || (track ? `Audios/${album.artist}/${track[2]}` : '')
-      || (audioMatch ? `Audios/${audioMatch.album.artist}/${audioMatch.imageFile}` : '');
+    const artwork = song.image || (track ? getCatalogAssetPath(album, track[2]) : '')
+      || (audioMatch ? getCatalogAssetPath(audioMatch.album, audioMatch.imageFile) : '');
     if (artwork) image.src = artwork;
     image.alt = '';
     image.loading = 'lazy';
@@ -1859,8 +1888,8 @@ function renderSongCatalog() {
     album.tracks.map(([title, audioFile, imageFile]) => ({
       title,
       artist: album.artist,
-      preview: `Audios/${album.artist}/${audioFile}`,
-      image: `Audios/${album.artist}/${imageFile}`,
+      preview: getCatalogAssetPath(album, audioFile),
+      image: getCatalogAssetPath(album, imageFile),
       page: album.page
     }))
   );
@@ -1881,11 +1910,21 @@ function renderSongCatalog() {
 function renderHomeAlbumGroups() {
   if (!albumGrid || !Array.isArray(window.tunelySongCatalog)) return;
 
-  const catalogByArtist = new Map(window.tunelySongCatalog.map((album) => [album.artist.toLowerCase(), album]));
   const batches = [];
   homeAlbumTrackSets = [];
   const randomizedCards = shuffledItems(cards);
+  const randomizedTracks = shuffledItems(window.tunelySongCatalog.flatMap((album) =>
+    album.tracks.map(([title, audioFile, imageFile]) => ({
+      title,
+      artist: album.artist,
+      preview: getCatalogAssetPath(album, audioFile),
+      image: getCatalogAssetPath(album, imageFile),
+      page: album.page
+    }))
+  ));
+  const batchCount = Math.ceil(randomizedCards.length / HOME_ALBUM_BATCH_SIZE);
   for (let index = 0; index < randomizedCards.length; index += HOME_ALBUM_BATCH_SIZE) {
+    const batchIndex = batches.length;
     const batchCards = randomizedCards.slice(index, index + HOME_ALBUM_BATCH_SIZE);
     const batch = document.createElement('section');
     batch.className = 'home-album-batch';
@@ -1903,19 +1942,9 @@ function renderHomeAlbumGroups() {
     songsHeading.textContent = translations[root.lang]?.songsHeading || translations.en.songsHeading;
     const tracksGrid = document.createElement('div');
     tracksGrid.className = 'home-song-grid album-song-grid';
-    const batchTracks = [];
-    batchCards.forEach((card) => {
-      const album = catalogByArtist.get((card.dataset.search || '').toLowerCase());
-      album?.tracks.forEach(([title, audioFile, imageFile]) => {
-        batchTracks.push({
-          title,
-          artist: album.artist,
-          preview: `Audios/${album.artist}/${audioFile}`,
-          image: `Audios/${album.artist}/${imageFile}`,
-          page: album.page
-        });
-      });
-    });
+    const trackStart = Math.floor(batchIndex * randomizedTracks.length / batchCount);
+    const trackEnd = Math.floor((batchIndex + 1) * randomizedTracks.length / batchCount);
+    const batchTracks = randomizedTracks.slice(trackStart, trackEnd);
 
     const sampleTracks = shuffledItems(batchTracks).slice(0, HOME_RANDOM_SONG_LIMIT);
     homeAlbumTrackSets.push({ tracksGrid, tracks: batchTracks, sampleTracks });
@@ -1984,7 +2013,8 @@ function createSongEntry(track) {
 }
 
 const RECENTLY_PLAYED_STORAGE_KEY = 'tunely-recently-played';
-const RECENTLY_PLAYED_LIMIT = 8;
+const RECENTLY_PLAYED_LIMIT = 50;
+const HOME_RECENTLY_PLAYED_LIMIT = 8;
 
 function getRecentlyPlayedSongs() {
   try {
@@ -2001,12 +2031,20 @@ function getRecentlyPlayedSongs() {
 }
 
 function renderRecentlyPlayedSongs() {
-  if (!recentSongsGrid || !recentSongsSection) return;
+  if ((!recentSongsGrid || !recentSongsSection) && !libraryRecentSongsGrid) return;
   const songs = getRecentlyPlayedSongs();
-  recentSongsGrid.replaceChildren(...songs.map(createSongEntry));
-  recentSongCards = Array.from(recentSongsGrid.querySelectorAll('.song-card'));
-  const emptyMessage = document.getElementById('recentSongsEmpty');
-  if (emptyMessage) emptyMessage.hidden = songs.length > 0;
+  if (recentSongsGrid && recentSongsSection) {
+    const homeSongs = songs.slice(0, HOME_RECENTLY_PLAYED_LIMIT);
+    recentSongsGrid.replaceChildren(...homeSongs.map(createSongEntry));
+    recentSongCards = Array.from(recentSongsGrid.querySelectorAll('.song-card'));
+    const emptyMessage = document.getElementById('recentSongsEmpty');
+    if (emptyMessage) emptyMessage.hidden = homeSongs.length > 0;
+  }
+  if (libraryRecentSongsGrid) {
+    libraryRecentSongsGrid.replaceChildren(...songs.map(createSongEntry));
+    const emptyMessage = document.getElementById('libraryRecentSongsEmpty');
+    if (emptyMessage) emptyMessage.hidden = songs.length > 0;
+  }
 }
 
 function recordRecentlyPlayedSong(source) {
@@ -2024,15 +2062,24 @@ function recordRecentlyPlayedSong(source) {
   let playedTrack = null;
   for (const album of window.tunelySongCatalog) {
     const track = album.tracks.find(([, audioFile]) => {
-      const expectedPath = `/audios/${album.artist}/${audioFile}`.toLowerCase();
+      let expectedPath;
+      try {
+        expectedPath = decodeURIComponent(new URL(
+          getCatalogAssetPath(album, audioFile),
+          window.location.href
+        ).pathname).toLowerCase();
+      } catch (error) {
+        console.warn('Could not resolve a recently played catalog track URL.', error);
+        return false;
+      }
       return sourcePath.endsWith(expectedPath);
     });
     if (track) {
       playedTrack = {
         title: track[0],
         artist: album.artist,
-        preview: `Audios/${album.artist}/${track[1]}`,
-        image: `Audios/${album.artist}/${track[2]}`,
+        preview: getCatalogAssetPath(album, track[1]),
+        image: getCatalogAssetPath(album, track[2]),
         page: album.page
       };
       break;
@@ -2142,11 +2189,24 @@ function resetHighlight(card) {
 
 function renderSuggestions(matches, query) {
   if (!suggestions) return;
-  if (!query || !matches.length) {
+  if (!query) {
     suggestions.classList.remove('active');
     suggestions.innerHTML = '';
     suggestions.setAttribute('aria-hidden', 'true');
     searchInput?.setAttribute('aria-expanded', 'false');
+    return;
+  }
+
+  suggestions.classList.add('active');
+  suggestions.setAttribute('aria-hidden', 'false');
+  searchInput?.setAttribute('aria-expanded', 'true');
+  if (!matches.length) {
+    const emptyMessage = document.createElement('div');
+    emptyMessage.className = 'suggestion-empty';
+    emptyMessage.setAttribute('role', 'status');
+    emptyMessage.setAttribute('aria-live', 'polite');
+    emptyMessage.textContent = emptyState?.textContent.trim() || 'No artist or song found with this name.';
+    suggestions.replaceChildren(emptyMessage);
     return;
   }
 
@@ -2172,9 +2232,6 @@ function renderSuggestions(matches, query) {
     container.append(document.createTextNode(text.slice(lastIndex)));
   };
 
-  suggestions.classList.add('active');
-  suggestions.setAttribute('aria-hidden', 'false');
-  searchInput?.setAttribute('aria-expanded', 'true');
   const suggestionList = document.createElement('div');
   suggestionList.className = 'suggestion-list';
   suggestionList.replaceChildren(...matches.map((card) => {
@@ -2264,6 +2321,7 @@ function renderAllViewSuggestions(query) {
       return suggestion;
     });
   const searchMatches = [...matchingArtists, ...matchingSongs];
+  if (emptyState) emptyState.classList.toggle('hidden', searchMatches.length > 0);
   const normalizedQuery = query.trim().toLowerCase();
   const getMatchPriority = (match) => {
     const title = (match.dataset.search || '').toLowerCase();
@@ -2581,7 +2639,7 @@ function initLanguageSettings() {
     toggle.type = 'button';
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-controls', 'settingsMenu');
-    toggle.innerHTML = '<img src="Images/setting.png" class="settings-icon" alt="" aria-hidden="true"><span data-i18n="settings"></span>';
+    toggle.innerHTML = '<img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/setting.png" class="settings-icon" alt="" aria-hidden="true"><span data-i18n="settings"></span>';
 
     const panel = document.createElement('section');
     panel.id = 'settingsMenu';
@@ -2779,6 +2837,7 @@ function initControls() {
 }
 
 function init() {
+  initImageSkeletons();
   normalizePlayerMarkup();
   initTheme();
   renderSongCatalog();
@@ -2808,6 +2867,12 @@ function init() {
   });
   if (recentSongsGrid) {
     recentSongsGrid.addEventListener('click', (event) => {
+      const song = event.target.closest('.song-card');
+      if (song) playCatalogSong(song);
+    });
+  }
+  if (libraryRecentSongsGrid) {
+    libraryRecentSongsGrid.addEventListener('click', (event) => {
       const song = event.target.closest('.song-card');
       if (song) playCatalogSong(song);
     });
@@ -3074,6 +3139,69 @@ function patchPlayerControls() {
   audio.addEventListener('ended', saveSharedPlayerState);
 
   window.__tunelyPlayerPatched = true;
+}
+
+function initImageSkeletons() {
+  const imageSelector = '.song-icon, .album-art img, #album-header > img, .song-card img, .player-artwork';
+  const imageListeners = new WeakMap();
+
+  const setImageLoadingState = (image) => {
+    const previousListeners = imageListeners.get(image);
+    if (previousListeners) {
+      image.removeEventListener('load', previousListeners.onLoad);
+      image.removeEventListener('error', previousListeners.onError);
+      imageListeners.delete(image);
+    }
+
+    if (!image.getAttribute('src')) {
+      image.classList.remove('image-skeleton', 'image-loaded', 'image-load-error');
+      return;
+    }
+
+    image.classList.add('image-skeleton');
+    image.classList.remove('image-loaded', 'image-load-error');
+
+    let onLoad;
+    let onError;
+    const finishLoading = (loaded) => {
+      if (onLoad) image.removeEventListener('load', onLoad);
+      if (onError) image.removeEventListener('error', onError);
+      image.classList.remove('image-skeleton');
+      image.classList.toggle('image-loaded', loaded);
+      image.classList.toggle('image-load-error', !loaded);
+      imageListeners.delete(image);
+    };
+    onLoad = () => finishLoading(true);
+    onError = () => finishLoading(false);
+
+    image.addEventListener('load', onLoad, { once: true });
+    image.addEventListener('error', onError, { once: true });
+    imageListeners.set(image, { onLoad, onError });
+
+    if (image.complete) finishLoading(image.naturalWidth > 0);
+  };
+
+  const observeImages = (node) => {
+    if (!(node instanceof Element)) return;
+    if (node.matches(imageSelector)) setImageLoadingState(node);
+    node.querySelectorAll(imageSelector).forEach(setImageLoadingState);
+  };
+
+  observeImages(document.documentElement);
+  new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes') {
+        observeImages(mutation.target);
+        return;
+      }
+      mutation.addedNodes.forEach(observeImages);
+    });
+  }).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['src'],
+    childList: true,
+    subtree: true
+  });
 }
 
 window.addEventListener('load', () => {
