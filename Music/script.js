@@ -887,11 +887,140 @@ previewAudio.volume = 0.16;
 previewAudio.loop = true;
 previewAudio.muted = true;
 
+const DATA_CONSENT_STORAGE_KEY = 'tunely-data-consent';
+const MUSIC_DATA_RESET_STORAGE_KEY = 'tunely-music-data-reset-v1';
+const MUSIC_DATA_STORAGE_KEYS = [
+  'tunely-favorites',
+  'tunely-playlists',
+  'tunely-recently-played',
+  'tunely-player-state'
+];
+let musicDataConsent = 'unknown';
+const sessionMusicData = new Map();
+
+function readMusicData(key) {
+  if (musicDataConsent === 'allow') return localStorage.getItem(key);
+  if (musicDataConsent === 'deny') return sessionMusicData.get(key) || null;
+  return null;
+}
+
+function writeMusicData(key, value) {
+  if (musicDataConsent === 'allow') {
+    localStorage.setItem(key, value);
+  } else if (musicDataConsent === 'deny') {
+    sessionMusicData.set(key, value);
+  }
+}
+
+function resetStoredMusicData() {
+  MUSIC_DATA_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+}
+
+function showDataConsentPrompt() {
+  const app = document.getElementById('app');
+  if (app) app.inert = true;
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'data-consent-backdrop';
+
+  const dialog = document.createElement('section');
+  dialog.className = 'data-consent-dialog';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-labelledby', 'dataConsentTitle');
+
+  const heading = document.createElement('h2');
+  heading.id = 'dataConsentTitle';
+  heading.textContent = 'Save your music data on this device?';
+
+  const description = document.createElement('p');
+  description.textContent = 'Tunely can save your playlists, favorites, recently played songs, and player position in this browser. This data stays on this device and is not uploaded to a server. If you decline, your music data will not be saved and may not carry across pages.';
+
+  const actions = document.createElement('div');
+  actions.className = 'data-consent-actions';
+
+  const status = document.createElement('p');
+  status.className = 'data-consent-status';
+  status.setAttribute('role', 'status');
+  status.hidden = true;
+
+  const choose = (choice) => {
+    try {
+      localStorage.setItem(DATA_CONSENT_STORAGE_KEY, choice);
+    } catch (error) {
+      console.error('Could not save your music-data preference.', error);
+      status.textContent = 'Your choice could not be saved in this browser. Please allow site storage and try again.';
+      status.hidden = false;
+      return;
+    }
+
+    musicDataConsent = choice;
+    if (choice === 'allow') {
+      window.location.reload();
+      return;
+    }
+
+    try {
+      resetStoredMusicData();
+    } catch (error) {
+      console.error('Could not clear previously stored music data.', error);
+      status.textContent = 'Your choice was saved, but old music data could not be cleared. Please enable site storage and reload.';
+      status.hidden = false;
+      return;
+    }
+    sessionMusicData.clear();
+    backdrop.remove();
+    if (app) app.inert = false;
+    renderRecentlyPlayedSongs();
+    if (document.getElementById('favoritesGrid')) renderFavoriteSongs();
+    if (document.getElementById('playlistCollection')) renderPlaylistLibrary();
+    syncLikeButtonState();
+  };
+
+  const allowButton = document.createElement('button');
+  allowButton.className = 'data-consent-allow';
+  allowButton.type = 'button';
+  allowButton.textContent = 'Allow saving';
+  allowButton.addEventListener('click', () => choose('allow'));
+
+  const denyButton = document.createElement('button');
+  denyButton.className = 'data-consent-deny';
+  denyButton.type = 'button';
+  denyButton.textContent = 'Don’t allow';
+  denyButton.addEventListener('click', () => choose('deny'));
+
+  actions.append(denyButton, allowButton);
+  dialog.append(heading, description, status, actions);
+  backdrop.appendChild(dialog);
+  document.body.appendChild(backdrop);
+  allowButton.focus();
+}
+
+function initMusicDataConsent() {
+  try {
+    if (localStorage.getItem(MUSIC_DATA_RESET_STORAGE_KEY) !== 'done') {
+      resetStoredMusicData();
+      localStorage.setItem(MUSIC_DATA_RESET_STORAGE_KEY, 'done');
+    }
+
+    const savedChoice = localStorage.getItem(DATA_CONSENT_STORAGE_KEY);
+    if (savedChoice === 'allow' || savedChoice === 'deny') {
+      musicDataConsent = savedChoice;
+      if (savedChoice === 'deny') resetStoredMusicData();
+      return;
+    }
+  } catch (error) {
+    console.error('Could not initialize music-data consent.', error);
+  }
+
+  showDataConsentPrompt();
+}
+
 const FAVORITES_STORAGE_KEY = 'tunely-favorites';
 
 function getFavoriteSongs() {
   try {
-    const stored = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]');
+    const stored = JSON.parse(readMusicData(FAVORITES_STORAGE_KEY) || '[]');
     return Array.isArray(stored) ? stored : [];
   } catch (error) {
     return [];
@@ -899,7 +1028,7 @@ function getFavoriteSongs() {
 }
 
 function saveFavoriteSongs(songs) {
-  localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(songs));
+  writeMusicData(FAVORITES_STORAGE_KEY, JSON.stringify(songs));
 }
 
 function getCurrentSongFromPlayer() {
@@ -1067,7 +1196,7 @@ const PLAYLIST_STORAGE_KEY = 'tunely-playlists';
 
 function getStoredPlaylists() {
   try {
-    const playlists = JSON.parse(localStorage.getItem(PLAYLIST_STORAGE_KEY) || '[]');
+    const playlists = JSON.parse(readMusicData(PLAYLIST_STORAGE_KEY) || '[]');
     return Array.isArray(playlists)
       ? playlists.filter((playlist) => typeof playlist?.name === 'string' && playlist.name.trim())
       : [];
@@ -1079,7 +1208,7 @@ function getStoredPlaylists() {
 
 function saveStoredPlaylists(playlists) {
   try {
-    localStorage.setItem(PLAYLIST_STORAGE_KEY, JSON.stringify(playlists));
+    writeMusicData(PLAYLIST_STORAGE_KEY, JSON.stringify(playlists));
     return true;
   } catch (error) {
     console.error('Could not save playlists.', error);
@@ -2012,7 +2141,7 @@ const HOME_RECENTLY_PLAYED_LIMIT = 8;
 
 function getRecentlyPlayedSongs() {
   try {
-    const stored = JSON.parse(localStorage.getItem(RECENTLY_PLAYED_STORAGE_KEY) || '[]');
+    const stored = JSON.parse(readMusicData(RECENTLY_PLAYED_STORAGE_KEY) || '[]');
     return Array.isArray(stored)
       ? stored.filter((song) => song && typeof song.title === 'string'
         && typeof song.artist === 'string' && typeof song.preview === 'string')
@@ -2091,7 +2220,7 @@ function recordRecentlyPlayedSong(source) {
   );
   songs.unshift(playedTrack);
   try {
-    localStorage.setItem(RECENTLY_PLAYED_STORAGE_KEY, JSON.stringify(songs.slice(0, RECENTLY_PLAYED_LIMIT)));
+    writeMusicData(RECENTLY_PLAYED_STORAGE_KEY, JSON.stringify(songs.slice(0, RECENTLY_PLAYED_LIMIT)));
   } catch (error) {
     console.warn('Could not save the recently played track.', error);
     return;
@@ -2835,6 +2964,7 @@ function initControls() {
 }
 
 function init() {
+  initMusicDataConsent();
   initImageSkeletons();
   normalizePlayerMarkup();
   initTheme();
@@ -2913,7 +3043,7 @@ function saveSharedPlayerState() {
   const audioSource = audio.currentSrc || audio.src || '';
 
   try {
-    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify({
+    writeMusicData(PLAYER_STORAGE_KEY, JSON.stringify({
       audioSrc: audioSource,
       currentSong: -1,
       currentTime: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
@@ -2935,7 +3065,7 @@ function restoreSharedPlayerState() {
   let state = null;
 
   try {
-    state = JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY) || 'null');
+    state = JSON.parse(readMusicData(PLAYER_STORAGE_KEY) || 'null');
   } catch (error) {
     console.warn('Could not restore player state.', error);
     return;
