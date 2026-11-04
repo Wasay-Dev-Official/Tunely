@@ -7,10 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../Style.css?v=5">
+  <link rel="stylesheet" href="../Style.css?v=6">
 </head>
 <body>
-  <div id="app" class="page-shell">
+  <div id="app" class="page-shell compact-nav-page">
     <aside id="menu" class="sidebar">
       <a id="logo" href="index.html" class="brand">Tunely</a>
       <nav class="nav-links" aria-label="Primary navigation" data-i18n-aria-label="primaryNavigation">
@@ -35,6 +35,16 @@
         <div id="playlistsEmpty" class="empty-state" data-i18n="playlistsEmpty" hidden>
           No playlists yet. Use a song menu to create one and add songs.
         </div>
+      </section>
+
+      <section id="recentlyPlayed" class="section library-recent-section">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="recentlyPlayedHeading">Recently played</h2>
+          </div>
+        </div>
+        <p id="libraryRecentSongsEmpty" class="home-recent-empty" data-i18n="recentSongsEmpty">Play a song to start your recent list.</p>
+        <div id="libraryRecentSongsGrid" class="home-song-grid" aria-label="Recently played songs" data-i18n-aria-label="recentlyPlayedHeading"></div>
       </section>
     </main>
 
