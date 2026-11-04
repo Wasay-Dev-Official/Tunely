@@ -889,7 +889,7 @@ a {
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
   gap: 16px;
 }
 
@@ -995,7 +995,7 @@ a {
 
 .home-songs-section .home-song-grid,
 .album-song-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
 }
 
 .home-album-list .album-card {
@@ -1054,7 +1054,7 @@ a {
   margin-block: 48px 40px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .home-songs-section .home-song-grid,
   .album-song-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1852,7 +1852,7 @@ select {
    TABLETS
 ======================================== */
 
-@media (max-width: 1120px) {
+@media (max-width: 768px) {
 
   .sidebar,
   #menu {
@@ -1867,8 +1867,10 @@ select {
 
   .settings-menu {
     top: calc(100% + 10px);
+    right: 0;
+    left: auto;
     bottom: auto;
-    width: 100%;
+    width: min(320px, calc(100vw - 48px));
   }
 
   
@@ -2017,6 +2019,7 @@ select {
   .section-description {
     font-size: 0.9rem;
   }
+
 }
 
 /* ========================================
@@ -2024,6 +2027,25 @@ select {
 ======================================== */
 
 @media (max-width: 520px) {
+
+  .home-songs-section .home-song-grid,
+  .album-song-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-songs-section .song-entry > .song-card,
+  .album-song-grid .song-entry > .song-card {
+    gap: 8px;
+    padding: 7px;
+    padding-right: 42px;
+  }
+
+  .home-songs-section .song-card img,
+  .album-song-grid .song-card img {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
 
   .sidebar,
   #menu {
@@ -2183,7 +2205,7 @@ select {
   scrollbar-color: rgba(29,185,84,0.8) rgba(255,255,255,0.05);
 }
 
-@media (max-width: 840px) {
+@media (max-width: 768px) {
   .sidebar {
     padding: 24px 18px;
   }
@@ -2747,7 +2769,7 @@ body[data-theme] {
   box-shadow: 0 8px 24px var(--accent-soft);
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 768px) {
   .favorites-page #menu,
   .compact-nav-page #menu {
     display: grid;
@@ -3273,12 +3295,45 @@ body[data-theme] {
   width: 78px;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1050px) and (min-width: 769px) {
   #player.shared-player,
   #app.favorites-page #player.shared-player {
+    left: 270px;
     right: 14px;
-    width: calc(100% - 28px);
-    max-width: 900px;
+    width: auto;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "track group"
+      "progress progress"
+      "time controls";
+    gap: 7px 10px;
+    padding: 11px 13px;
+  }
+
+  #player.shared-player .button-group,
+  #app.favorites-page #player.shared-player .button-group {
+    justify-content: flex-end;
+  }
+
+  #player.shared-player .control-btn,
+  #player.shared-player #playBtn,
+  #app.favorites-page #player.shared-player .control-btn,
+  #app.favorites-page #player.shared-player #playBtn {
+    width: 34px;
+    height: 34px;
+  }
+
+  #player.shared-player .control-btn svg,
+  #player.shared-player #playBtn svg,
+  #app.favorites-page #player.shared-player .control-btn svg,
+  #app.favorites-page #player.shared-player #playBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  #player.shared-player #volume,
+  #app.favorites-page #player.shared-player #volume {
+    width: 64px;
   }
 }
 
