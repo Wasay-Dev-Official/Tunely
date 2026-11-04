@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -20,10 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../Style.css?v=15">
+  <link rel="stylesheet" href="../Style.css?v=16">
 </head>
 <body>
-  <div id="app" class="page-shell">
+  <div id="app" class="page-shell compact-nav-page">
     <aside id="menu" class="sidebar">
       <a id="logo" href="index.html" class="brand">Tunely</a>
 
@@ -39,7 +39,7 @@
 
     
     <img
-      src="Images/setting.png"
+      src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/setting.png"
       class="settings-icon"
       alt=""
       aria-hidden="true"
@@ -136,6 +136,7 @@
           <div>
             <h2 data-i18n="recentlyPlayedHeading">Recently played</h2>
           </div>
+          <a class="recent-see-more" href="Library.html#recentlyPlayed" data-i18n="seeMore">See more</a>
         </div>
         <p id="recentSongsEmpty" class="home-recent-empty" data-i18n="recentSongsEmpty">Play a song to start your recent list.</p>
         <div id="recentSongsGrid" class="home-song-grid" aria-label="Recently played songs" data-i18n-aria-label="recentlyPlayedHeading"></div>
@@ -146,7 +147,7 @@
         <div id="albumGrid" class="home-album-groups" aria-label="Music collection" data-i18n-aria-label="musicCollection">
           <a class="album-card" href="The-Weeknd.html" data-search="The Weeknd" data-bg="#941815" data-preview="Audios/The Weeknd/Blinding Lights.mp3">
             <div class="album-art">
-              <img src="Images/the weeknd.jpg" alt="The Weeknd" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/the%20weeknd.jpg" alt="The Weeknd" loading="lazy">
             </div>
             <div class="album-meta">
               <b>The Weeknd</b>
@@ -156,7 +157,7 @@
 
           <a class="album-card" href="Lana-Del-Rey.html" data-search="Lana Del Rey" data-bg="#5c3f8d" data-preview="Audios/Lana Del Rey/Video Games.mp3">
             <div class="album-art">
-              <img src="Images/lana del rey.jpg" alt="Lana Del Rey" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/lana%20del%20rey.jpg" alt="Lana Del Rey" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Lana Del Rey</b>
@@ -166,7 +167,7 @@
 
           <a class="album-card" href="Billie Eillish.html" data-search="Billie Eillish" data-bg="#0b6f6f" data-preview="Audios/Billie Eillish/bad guy.mp3">
             <div class="album-art">
-              <img src="Images/billie eillish.png" alt="Billie Eillish" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/billie%20eillish.png" alt="Billie Eillish" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Billie Eillish</b>
@@ -176,7 +177,7 @@
 
           <a class="album-card" href="Tame Impala.html" data-search="Tame Impala" data-bg="#2f3d4e" data-preview="Audios/Tame Impala/Borderline.mp3">
             <div class="album-art">
-              <img src="Images/tame impala.jpg" alt="Tame Impala" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/tame%20impala.jpg" alt="Tame Impala" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Tame Impala</b>
@@ -186,7 +187,7 @@
 
           <a class="album-card" href="The-Neighbourhood.html" data-search="The Neighbourhood" data-bg="#2f3d4e" data-preview="Audios/The Neighbourhood/sweater weather.mp3">
             <div class="album-art">
-              <img src="Images/the neighbourhood.jpg" alt="The Neighbourhood" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/the%20neighbourhood.jpg" alt="The Neighbourhood" loading="lazy">
             </div>
             <div class="album-meta">
               <b>The Neighbourhood</b>
@@ -196,7 +197,7 @@
 
           <a class="album-card" href="Talha-Anjum.html" data-search="Talha Anjum" data-bg="#1f5f32" data-preview="Audios/Talha Anjum/Afsanay.mp3">
             <div class="album-art">
-              <img src="Images/talha anjum.jpg" alt="Talha Anjum" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/talha%20anjum.jpg" alt="Talha Anjum" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Talha Anjum</b>
@@ -204,9 +205,19 @@
             </div>
           </a>
 
+          <a class="album-card" href="Navai.html" data-search="Navai" data-bg="#5c3f8d" data-preview="Audios/Navai/Navai , Bahh Tee - Не приму и даром - HammAli & Navai.mp3">
+            <div class="album-art">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/Navai.jpg" alt="Navai" loading="lazy">
+            </div>
+            <div class="album-meta">
+              <b>Navai</b>
+              <span data-i18n="artist">Artist</span>
+            </div>
+          </a>
+
           <a class="album-card" href="Chase-Atlantic.html" data-search="Chase Atlantic" data-bg="#18475f" data-preview="Audios/Chase Atlantic/Church.mp3">
             <div class="album-art">
-              <img src="Images/chase atlantic.jpg" alt="Chase Atlantic" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/chase%20atlantic.jpg" alt="Chase Atlantic" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Chase Atlantic</b>
@@ -216,7 +227,7 @@
 
           <a class="album-card" href="Kendrick Lamar.html" data-search="Kendrick Lamar" data-bg="#3b2a1f" data-preview="Audios/Kendrick Lamar/Humble.mp3">
   <div class="album-art">
-    <img src="Images/kendrick lamar.jpg" alt="Kendrick Lamar" loading="lazy">
+    <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/kendrick%20lamar.jpg" alt="Kendrick Lamar" loading="lazy">
   </div>
   <div class="album-meta">
     <b>Kendrick Lamar</b>
@@ -224,9 +235,9 @@
   </div>
 </a>
 
-  <a class="album-card" href="Adele.html" data-search="Adele" data-bg="#3b2a1f" data-preview="Audios/Adele/Chasing Pavements.mp3">
+  <a class="album-card" href="Adele.html" data-search="Adele" data-bg="#3b2a1f" data-preview="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Audios/Adele/Chasing%20Pavements.mp3">
   <div class="album-art">
-    <img src="Images/adele.png" alt="Adele" loading="lazy">
+    <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/adele.png" alt="Adele" loading="lazy">
   </div>
 
   <div class="album-meta">
@@ -237,7 +248,7 @@
 
           <a class="album-card" href="Justin Bieber.html" data-search="Justin Bieber" data-bg="#275b77">
             <div class="album-art">
-              <img src="Images/Justin Bieber.jpg" alt="Justin Bieber" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/Justin%20Bieber.jpg" alt="Justin Bieber" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Justin Bieber</b>
@@ -247,7 +258,7 @@
 
           <a class="album-card" href="TV Girl.html" data-search="TV Girl" data-bg="#452345" data-preview="Audios/TV Girl/Not Allowed.mp3">
             <div class="album-art">
-              <img src="Images/tv girl.jpg" alt="TV Girl" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/tv%20girl.jpg" alt="TV Girl" loading="lazy">
             </div>
             <div class="album-meta">
               <b>TV Girl</b>
@@ -257,7 +268,7 @@
 
           <a class="album-card" href="Yo Yo Honey Singh.html" data-search="Yo Yo Honey Singh" data-bg="#a34c1a" data-preview="Audios/Yo Yo Honey Singh/BROWN RANG.mp3">
             <div class="album-art">
-              <img src="Images/yo yo honey singh.jpg" alt="Yo Yo Honey Singh" loading="lazy">
+              <img src="https://pub-5535fdd2753a45898c540f95dd6c9f64.r2.dev/Images/yo%20yo%20honey%20singh.jpg" alt="Yo Yo Honey Singh" loading="lazy">
             </div>
             <div class="album-meta">
               <b>Yo Yo Honey Singh</b>
@@ -312,4 +323,3 @@
   <script src="script.js" defer></script>
 </body>
 </html>
-
